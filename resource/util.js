@@ -15,6 +15,33 @@ class Util {
     return (new this()).getClassMethods(classInstance);
   }
 
+  getClassMethods(classInstance) {
+    let props = [];
+    let copyClass = classInstance;
+
+    // pegando os prototypes da classe
+    do {
+      props = props.concat(Object.getOwnPropertyNames(copyClass));
+    } while(copyClass = Object.getPrototypeOf(copyClass));
+
+    // removendo prototypes repetidos
+    props.sort().filter(function (element, index, array) {
+      return (array.indexOf(element) == index);
+    });
+
+    /**
+     * if error is not instance of class
+     * if not exists error is instance of class
+     */
+    try {
+      props = props.filter((element, index, array) => {
+        return typeof classInstance[element] == 'function';
+      });
+    } catch (error) { }
+
+    return props;
+  }
+
   getNumber(value) {
     let numbers = '1234567890'
     let isfloat = false;
@@ -36,8 +63,16 @@ class Util {
     return (isfloat) ? parseFloat(string) : parseInt(string);
   }
 
+  isUndefined(value) {
+    return (typeof value === 'undefined');
+  }
+
+  isNull(value) {
+    return (value === null);
+  }
+
   isNullOrUndefined(value) {
-    return (value === null || typeof value === 'undefined');
+    return (this.isNull(value) || this.isUndefined(value));
   }
 
   isString(value) {
@@ -111,33 +146,6 @@ class Util {
     if (this.isNullOrUndefined(value)) return false;
     if (!this.isString(value)) return false;
     return /^.+@\w+\.\w{3}$|^.+@\w+\.\w{3}\.\w{2}$/.test(value);
-  }
-
-  getClassMethods(classInstance) {
-    let props = [];
-    let copyClass = classInstance;
-
-    // pegando os prototypes da classe
-    do {
-      props = props.concat(Object.getOwnPropertyNames(copyClass));
-    } while(copyClass = Object.getPrototypeOf(copyClass));
-
-    // removendo prototypes repetidos
-    props.sort().filter(function (element, index, array) {
-      return (array.indexOf(element) == index);
-    });
-
-    /**
-     * if error is not instance of class
-     * if not exists error is instance of class
-     */
-    try {
-      props = props.filter((element, index, array) => {
-        return typeof classInstance[element] == 'function';
-      });
-    } catch (error) { }
-
-    return props;
   }
 }
 

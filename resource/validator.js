@@ -27,24 +27,31 @@ class Validator extends Util {
   }
 
   getMessage(field, rule) {
-    let existsRules = this.module.isObject(this.message);
+    if (this.isObject(this.message) && this.isObject(this.message[field]))
+      let rulemessage = this.message[field];
     let message = '';
 
     switch (rule) {
       case 'required':
-        message = (existsRules && this.message[field] && this.message[field][rule]) ? this.message[field][rule] : `field '${field}' is required`; break;
+        message = this.isString(rulemessage[rule]) ? rulemessage[rule] : `field '${field}' is required`; break;
       case 'array':
-        message = (existsRules && this.message[field] && this.message[field][rule]) ? this.message[field][rule] : `field '${field}' is not array`; break;
+        message = this.isString(rulemessage[rule]) ? rulemessage[rule] : `field '${field}' is not array`; break;
       case 'object':
-        message = (existsRules && this.message[field] && this.message[field][rule]) ? this.message[field][rule] : `field '${field}' is not object`; break;
+        message = this.isString(rulemessage[rule]) ? rulemessage[rule] : `field '${field}' is not object`; break;
       case 'interger':
-        message = (existsRules && this.message[field] && this.message[field][rule]) ? this.message[field][rule] : `field '${field}' is not number`; break;
+        message = this.isString(rulemessage[rule]) ? rulemessage[rule] : `field '${field}' is not interger`; break;
       case 'string':
-        message = (existsRules && this.message[field] && this.message[field][rule]) ? this.message[field][rule] : `field '${field}' is not string`; break;
+        message = this.isString(rulemessage[rule]) ? rulemessage[rule] : `field '${field}' is not string`; break;
+      case 'datetime':
+        message = this.isString(rulemessage[rule]) ? rulemessage[rule] : `field '${field}' is not datetime`; break;
       case 'date':
-        message = (existsRules && this.message[field] && this.message[field][rule]) ? this.message[field][rule] : `field '${field}' is not date`; break;
+        message = this.isString(rulemessage[rule]) ? rulemessage[rule] : `field '${field}' is not date`; break;
+      case 'time':
+        message = this.isString(rulemessage[rule]) ? rulemessage[rule] : `field '${field}' is not time`; break;
+      case 'email':
+        message = this.isString(rulemessage[rule]) ? rulemessage[rule] : `field '${field}' is not email`; break;
       case 'boolean':
-        message = (existsRules && this.message[field] && this.message[field][rule]) ? this.message[field][rule] : `field '${field}' is not boolean`; break;
+        message = this.isString(rulemessage[rule]) ? rulemessage[rule] : `field '${field}' is not boolean`; break;
     }
 
     if (/min\:/g.test(rule) || /max\:/g.test(rule)) message = `field '${field}' error ${rule}`;
@@ -54,6 +61,8 @@ class Validator extends Util {
 
   validateField(rule, value) {
     switch (rule) {
+      case 'required':
+        return this.isNullOrUndefined(value);
       case 'array':
         return !this.isArray(value)
       case 'object':
@@ -90,16 +99,11 @@ class Validator extends Util {
   }
 
   handle() {
-    if (!this.module.isObject(this.rules)) throw new Error('');
-    if (!this.module.isObject(this.data))  throw new Error('');
+    if (!this.isObject(this.rules)) throw new Error('');
+    if (!this.isObject(this.data))  throw new Error('');
 
     for(let field in this.rules) {
       let rules = this.rules[field].split('|');
-
-      if (this.in_array(rules, 'required') && this.data[field] === undefined) {
-        this.failedFields[field] = this.getMessage(field, 'required');
-        continue;
-      }
 
       for(let rule of rules) {
         let failed = this.validateField(rule, this.data[field]);
