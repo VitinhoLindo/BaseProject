@@ -14,11 +14,18 @@ class Orm {
     this.connector = new Connector();
   }
 
+  static _fields() {
+    let model = new this();
+    return model.fields;
+  }
+
   toJSON() {
     let json = {};
 
     for(let field of this.fields)
       if (this[field] !== undefined) json[field] = this[field];
+
+    return json;
   }
 
   static select(...args) {

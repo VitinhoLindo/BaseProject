@@ -1,4 +1,5 @@
 const Storage = require('./storage');
+const Vue = require('./vue/vue-router');
 
 class Middleware {
   _storage = new Storage();
@@ -11,8 +12,14 @@ class Middleware {
     this._app.use(Storage.require('api'));
   }
 
+  vue() {
+    this._app.use(Vue());
+  }
+
   get() {
     this.router();
+    this.vue();
+
     return this._app;
   }
 

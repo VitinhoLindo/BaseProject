@@ -5,6 +5,7 @@ class Collection {
 
   constructor(data: any[], model: Model): void;
 
+  toArray(): object[];
   set(model: Model, data: any[]): void;
   first(): Model;
   last(): Model;

@@ -7,5 +7,11 @@ module.exports = {
   Server: require('./server'),
   Controller: require('./controller'),
   RouterApi: require('./router'),
-  Validator: require('./validator')
+  Validator: require('./validator'),
+  Models: require('./models'),
+  Vue: {
+    Router: require('./vue/vue-router'),
+    Model : require('./vue/vue'),
+    Fields: require('./vue/fields')
+  }
 }

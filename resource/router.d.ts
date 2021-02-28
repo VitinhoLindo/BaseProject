@@ -20,6 +20,7 @@ class RouterApi {
   util: Util;
   router: typeof Router;
 
+  responseHeader(headers: object): RouterApi;
   url(url: string): RouterApi;
   static(path: string, router: string): RouterApi;
   usePrefix(): boolean;

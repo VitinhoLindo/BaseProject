@@ -27,8 +27,9 @@ class Validator extends Util {
   }
 
   getMessage(field, rule) {
+    let rulemessage;
     if (this.isObject(this.message) && this.isObject(this.message[field]))
-      let rulemessage = this.message[field];
+      rulemessage = this.message[field];
     let message = '';
 
     switch (rule) {

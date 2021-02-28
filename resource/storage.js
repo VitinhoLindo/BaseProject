@@ -73,6 +73,11 @@ class Storage {
             parser: arg.parser,
             encoding: arg.encoding
           });
+        },
+        list: function () {
+          return storage.list({
+            path: args.path
+          });
         }
       };
     }
@@ -113,6 +118,17 @@ class Storage {
     );
 
     return this.parseContent('read', value, parser);
+  }
+
+  list({ path = '' }) {
+    let exists = this.exists(path), files = [];
+    if (!exists.status) throw new Error('List Dir: path is not exists');
+
+    files = this._fs.readdirSync(
+      exists.path
+    );
+
+    return files;
   }
 
   set({ path = '', filename = '', value = '', encoding = 'utf-8', parser }) {

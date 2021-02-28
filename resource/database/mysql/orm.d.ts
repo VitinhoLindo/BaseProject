@@ -10,6 +10,7 @@ class Orm {
   connector: Connector;
   builder: Builder;
 
+  static _fields(): string[];
   static select(args: string[]): Orm;
   select(args: string[]): Orm;
   static orderBy(arg: OrderByArguments): Orm;

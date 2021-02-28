@@ -38,6 +38,7 @@ type ParseContent = 'json';
 class Disk {
   save(arg: DiskWrite): void;
   find(arg: DiskRead): any;
+  list(): string[];
 }
 
 class Storage {

@@ -11,9 +11,8 @@ class Collection {
     for(let row of data) {
       const _model = new model();
 
-      for(let key in row) {
-        _model[key] = row[key];
-      }
+      for(let field of _model.fields)
+        _model[field] = row[field] || null;
 
       rows.push(_model);
     }

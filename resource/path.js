@@ -4,7 +4,8 @@ const windows = {
   http: '\\http',
   controller: '\\controller',
   private: '\\private',
-  public: '\\public'
+  public: '\\public',
+  resource: '\\app'
 }
 
 const linux = {
@@ -13,7 +14,8 @@ const linux = {
   http: '/http',
   controller: '/controller',
   private: '/private',
-  public: '/public'
+  public: '/public',
+  resource: '/app'
 }
 
 class Path {
@@ -36,6 +38,10 @@ class Path {
 
   exec_dir(argv = []) {
     return this.path_dir(argv[1]);
+  }
+
+  info(arg) {
+    return this._path.parse(arg);
   }
 
   path_dir(path) {
@@ -62,6 +68,8 @@ class Path {
         return this.join_path(this.get('root'), this._paths.private);
       case 'public':
         return this.join_path(this.get('root'), this._paths.public);
+      case 'resource':
+        return this.join_path(this.get('root'), this._paths.resource);
       case 'root':
       default:
         return this.join_path(this._paths.dir, this._paths.path);

@@ -2,11 +2,13 @@ const Storage   = require('./storage');
 const Crypto    = require('./crypto');
 const Cache     = require('./cache');
 const Validator = require('./validator');
+const Util      = require('./util');
 
 class Controller {
   storage   = new Storage();
   crypto    = new Crypto();
   cache     = new Cache();
+  util      = new Util();
   Validator = Validator;
 
   constructor(request, response) {
@@ -14,6 +16,11 @@ class Controller {
     this.response = response;
   }
 
+  all() {
+    try {
+      return Object.assign({}, this.request.query, this.request.params, this.request.body);
+    } catch (error) { return {}; }
+  }
   currentTime(date = new Date()) { return date.getTime(); }  
   sendJSON(json) { this.response.json(json); }
   end() { this.response.end(); }
@@ -33,6 +40,11 @@ class Controller {
       time: this.currentTime()
     });
     this.end();
+  }
+
+  error(error) {
+    if (this.util.isObject(error)) return this.defaultResponse(error);
+    return this.defaultResponse({ code: 500, message: 'internal server error' });
   }
 }
 

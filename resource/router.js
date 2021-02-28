@@ -17,6 +17,15 @@ const RouterApi = function () {
 
       return url;
     },
+    responseHeader(headers = {}) {
+      this.router.use((request, response, next) => {
+        for (let key in headers)
+          response.setHeader(key, headers[key]);
+        next();
+      });
+
+      return this;
+    },
     static(url, path) {
       this.router.use(
         url,
@@ -58,7 +67,7 @@ const RouterApi = function () {
         );
         controllerClass = this.storage.require(pathFile, false);
       } else {
-        controllerClass = this.storage.require(controllerClass);
+        controllerClass = this.storage.require(controllerClass, false);
       }
 
       return {
@@ -82,8 +91,9 @@ const RouterApi = function () {
                   please create static function instance for return instance class
         ClassName: ${controller.constructor.name}
       `);
+
       let instance = controller.instance();
-      prototype = this.util.getClassMethods(controller.instance());
+          prototype = this.util.getClassMethods(controller.instance());
       if (!this.util.in_array(prototype, functionName)) throw new Error(`
         code (2): function name is not defined in ControllerClass
         ClassName: '${instance.constructor.name}'

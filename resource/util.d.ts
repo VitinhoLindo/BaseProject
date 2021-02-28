@@ -31,3 +31,5 @@ class Util {
   isArray(value: any): boolean;
   isEmail(value: any): boolean;
 }
+
+export = Util;
